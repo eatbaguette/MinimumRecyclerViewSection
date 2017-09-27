@@ -9,12 +9,20 @@ import android.widget.TextView
 import com.list_sample.minimumrecyclerview.R
 import com.list_sample.minimumrecyclerview.model.EvenNumberModel
 import com.list_sample.minimumrecyclerview.model.OddNumberModel
+import com.list_sample.minimumrecyclerview.model.section.HeaderSection
+import com.list_sample.minimumrecyclerview.model.section.SectionGroup
+import com.list_sample.minimumrecyclerview.model.SectionHeaderModel
 
 /**
  * Created by monkey on 2017/09/26.
  */
 class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     private val inflater = LayoutInflater.from(context)
+
+    val sectionGroup = SectionGroup()
+            .append(HeaderSection(0, SectionHeaderModel("ヘッダータイトル1"), itemList))
+            .append(HeaderSection(1, SectionHeaderModel("ヘッダータイトル2"), itemList))
 
 
     enum class ViewType(val id: Int) {
@@ -32,7 +40,6 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
             }
 
         },
-
         OddNumber(1) {
             override fun createViewHolder(inflater: LayoutInflater, viewGroup: ViewGroup): RecyclerView.ViewHolder {
                 return OddNumberHolder(inflater.inflate(R.layout.odd_number_cell, viewGroup, false))
@@ -44,7 +51,20 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
 
                 holder.oddNumberCellText.text = item.cellText
             }
-        };
+        },
+        SectionHeader(2) {
+            override fun createViewHolder(inflater: LayoutInflater, viewGroup: ViewGroup): RecyclerView.ViewHolder {
+                return SectionHeaderHolder(inflater.inflate(R.layout.section_header_cell, viewGroup, false))
+            }
+
+            override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
+                holder as SectionHeaderHolder
+                item as SectionHeaderModel
+
+                holder.sectionHeaderText.text = item.titleText
+            }
+        }
+        ;
 
         // 抽象クラス
         abstract fun createViewHolder(inflater: LayoutInflater, viewGroup: ViewGroup) : RecyclerView.ViewHolder
@@ -72,6 +92,10 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
         private class OddNumberHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             val oddNumberCellText = itemView.findViewById<TextView>(R.id.odd_number_cell_text)
         }
+
+        private class SectionHeaderHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+            val sectionHeaderText = itemView.findViewById<TextView>(R.id.section_header_cell_header_text)
+        }
     }
 
 
@@ -83,12 +107,12 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = itemList[position]
+        val item = sectionGroup.itemAt(position)
         ViewType.forId(holder.itemViewType).bindViewHolder(holder, item)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = itemList[position]
+        val item = sectionGroup.itemAt(position)
 
         return when(item) {
             is EvenNumberModel -> {
@@ -97,6 +121,9 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
             is OddNumberModel -> {
                 ViewType.OddNumber.id
             }
+            is SectionHeaderModel -> {
+                ViewType.SectionHeader.id
+            }
             else -> {
                 throw AssertionError("no enum")
             }
@@ -104,6 +131,6 @@ class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): Re
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return sectionGroup.totalCount()
     }
 }

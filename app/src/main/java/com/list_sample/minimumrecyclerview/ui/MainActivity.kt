@@ -11,6 +11,7 @@ import com.list_sample.minimumrecyclerview.model.EvenNumberModel
 import com.list_sample.minimumrecyclerview.model.OddNumberModel
 import com.list_sample.minimumrecyclerview.model.SectionHeaderModel
 import com.list_sample.minimumrecyclerview.model.section.HeaderSection
+import com.list_sample.minimumrecyclerview.model.section.NoHeaderSection
 import com.list_sample.minimumrecyclerview.model.section.SectionGroup
 import java.util.*
 
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         sectionGroup
                 .append(HeaderSection(0, SectionHeaderModel("ヘッダータイトル1"), itemList))
                 .append(HeaderSection(1, SectionHeaderModel("ヘッダータイトル2"), itemList))
+                .append(NoHeaderSection(2, itemList))
 
         // 更新
         adapter.notifyDataSetChanged()

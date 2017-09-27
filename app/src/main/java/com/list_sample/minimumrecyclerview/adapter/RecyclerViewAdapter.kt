@@ -16,13 +16,9 @@ import com.list_sample.minimumrecyclerview.model.SectionHeaderModel
 /**
  * Created by monkey on 2017/09/26.
  */
-class RecyclerViewAdapter(context: Context, private val itemList: List<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RecyclerViewAdapter(context: Context, private val sectionGroup:SectionGroup): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
-
-    val sectionGroup = SectionGroup()
-            .append(HeaderSection(0, SectionHeaderModel("ヘッダータイトル1"), itemList))
-            .append(HeaderSection(1, SectionHeaderModel("ヘッダータイトル2"), itemList))
 
 
     enum class ViewType(val id: Int) {

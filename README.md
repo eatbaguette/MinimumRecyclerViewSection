@@ -1,5 +1,5 @@
 # 概要
-非推奨。ViewTypeの分け方が良くないので、ClickListenerをつけるときに面倒
+非推奨。ViewTypeの分け方が良くないので、ClickListenerをつけるときに面倒  
 推奨する方法(https://github.com/eatbaguette/RecyclerViewSection)
 
 スクロールする画面は基本的にRecyclerViewで作る
